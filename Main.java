@@ -8,12 +8,12 @@ public class Main {
         
         map.put("Value 4", 15);
 
-        System.out.println("Value 1: " + map.get("Value 1"));     // 15
-        System.out.println("Value 2: " + map.get("Value 2"));   // 20
-        System.out.println("Value 3: " + map.get("Value 3"));     // null
+        System.out.println("Value 1: " + map.get("Value 1"));     
+        System.out.println("Value 2: " + map.get("Value 2"));   
+        System.out.println("Value 3: " + map.get("Value 3"));     
 
-        System.out.println("Removed Value 2: " + map.remove("Value 2")); // 20
-        System.out.println("Value 2 after remove: " + map.get("Value 2")); // null
-        System.out.println("Total size: " + map.size()); // 2
+        System.out.println("Removed Value 2: " + map.remove("Value 2")); 
+        System.out.println("Value 2 after remove: " + map.get("Value 2")); 
+        System.out.println("Total size: " + map.size()); 
     }
 }
