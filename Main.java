@@ -2,18 +2,18 @@ public class Main {
     public static void main(String[] args) {
         MyHashMap<String, Integer> map = new MyHashMap<>();
 
-        map.put("Value1", 10);
-        map.put("Value2", 20);
-        map.put("Value3", 30);
+        map.put("Value 1", 10);
+        map.put("Value 2", 20);
+        map.put("Value 3", 30);
         
-        map.put("Value4", 15);
+        map.put("Value 4", 15);
 
-        System.out.println("Value1: " + map.get("Value1"));     
-        System.out.println("Value2: " + map.get("Value2"));   
-        System.out.println("Value3: " + map.get("Value3"));     
+        System.out.println("Value 1: " + map.get("Value 1"));     // 15
+        System.out.println("Value 2: " + map.get("Value 2"));   // 20
+        System.out.println("Value 3: " + map.get("Value 3"));     // null
 
-        System.out.println("Removed Value2: " + map.remove("Value2")); 
-        System.out.println("Value2 after remove: " + map.get("Value2")); 
-        System.out.println("Total size: " + map.size()); 
+        System.out.println("Removed Value 2: " + map.remove("Value 2")); // 20
+        System.out.println("Value 2 after remove: " + map.get("Value 2")); // null
+        System.out.println("Total size: " + map.size()); // 2
     }
 }
