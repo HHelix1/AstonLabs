@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,16 @@ import java.util.function.Function;
 
 public class UserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
+
+    private final SessionFactory sessionFactory;
+
+    public UserDao() {
+        this(HibernateUtil.getSessionFactory());
+    }
+
+    public UserDao(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public User create(User user) {
         return execute(session -> {
@@ -58,18 +69,29 @@ public class UserDao {
             return true;
         });
     }
+    private void rollbackSafely(Transaction transaction) {
+        if (transaction == null || !transaction.isActive()) {
+            return;
+        }
+        try {
+            transaction.rollback();
+        } catch (Exception exception) {
+            logger.warn("Rollback не удался (соединение уже закрыто?)", exception);
+        }
+    }
 
     private <T> T execute(Function<Session, T> action) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             T result = action.apply(session);
             transaction.commit();
             return result;
         } catch (ConstraintViolationException exception) {
-            rollback(transaction);
+            rollbackSafely(transaction);
             logger.error("Нарушено ограничение БД", exception);
-            throw new DataAccessException("Нарушено ограничение базы данных: " + exception.getSQLException().getMessage(), exception);
+            throw new DataAccessException("Нарушено ограничение базы данных: "
+                    + exception.getSQLException().getMessage(), exception);
         } catch (HibernateException exception) {
             rollback(transaction);
             logger.error("Ошибка Hibernate при выполнении операции", exception);
@@ -85,7 +107,7 @@ public class UserDao {
         if (transaction != null && transaction.isActive()) {
             try {
                 transaction.rollback();
-            } catch (HibernateException exception) {
+            } catch (Exception exception) {
                 logger.error("Не удалось выполнить rollback", exception);
             }
         }

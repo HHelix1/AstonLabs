@@ -1,0 +1,6 @@
+com\example\userservice\dao\UserDao$DataAccessException.class
+com\example\userservice\config\HibernateUtil.class
+com\example\userservice\Main.class
+com\example\userservice\dao\UserDao.class
+com\example\userservice\entity\User.class
+com\example\userservice\service\UserService.class
